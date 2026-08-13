@@ -2,12 +2,13 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useApp } from '../lib/store'
-import { signup, login } from '../lib/db'
-import { initDb } from '../lib/db'
-import { DuoMascot } from '../components/DuoMascot'
+import { useApp } from '../../lib/store'
+import { signup, login } from '../../lib/db'
+import { initDb } from '../../lib/db'
+import { DuoMascot } from '../../components/DuoMascot'
 import { toast } from 'sonner'
-import { cn } from '../lib/utils'
+import { cn } from '../../lib/utils'
+import AuthRoute from '../../components/AuthRoute'
 
 export default function AuthPage() {
   const router = useRouter()
@@ -62,6 +63,7 @@ export default function AuthPage() {
   }
 
   return (
+    <AuthRoute>
     <div className="min-h-svh flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
@@ -163,5 +165,6 @@ export default function AuthPage() {
         </p>
       </div>
     </div>
+    </AuthRoute>
   )
 }

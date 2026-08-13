@@ -1,4 +1,4 @@
-import { LessonPlayer } from '../../components/LessonPlayer'
+import { LessonPlayer } from '../../../components/LessonPlayer'
 
 export default function LessonPage() {
   return <LessonPlayer />
