@@ -139,7 +139,7 @@ export default function LearningPathPage() {
                       </div>
                     )}
                   </button>
-
+                    
                   <div className="mt-2 text-center">
                     <p className={cn('font-bold text-sm', isUnlocked ? 'text-foreground' : 'text-muted-foreground')}>
                       {skill.title}
