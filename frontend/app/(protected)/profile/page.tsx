@@ -69,33 +69,31 @@ export default function ProfilePage() {
       </div>
 
       <div className="bg-card border-2 border-border rounded-2xl p-4">
-        <h3 className="font-black text-lg mb-4 flex items-center gap-2">
-          <TrendingUp className="size-5 text-duo-green" />
-          XP This Week
-        </h3>
-        <div className="flex items-end justify-between gap-2 h-32">
-          {dailyXp.length === 0 ? (
-            <p className="text-muted-foreground text-sm">No data yet</p>
-          ) : (
-            dailyXp.map((day, i) => {
-              const date = new Date(day.log_date)
-              const dayName = date.toLocaleDateString('en', { weekday: 'short' })
-              const height = (day.xp_earned / maxDayXp) * 100
-              return (
-                <div key={i} className="flex flex-col items-center gap-1 flex-1">
-                  <div className="w-full flex-1 flex items-end">
-                    <div
-                      className="w-full bg-duo-green rounded-t-lg transition-all"
-                      style={{ height: `${height}%`, minHeight: '4px' }}
-                    />
-                  </div>
-                  <span className="text-xs font-bold text-muted-foreground">{dayName}</span>
-                </div>
-              )
-            })
-          )}
-        </div>
+      <h3 className="font-black text-lg mb-4 flex items-center gap-2">
+        <TrendingUp className="size-5 text-duo-green" />
+        XP This Week
+      </h3>
+      <div className="flex items-end justify-between gap-2 h-32">
+        {dailyXp.length === 0 ? (
+          <p className="text-muted-foreground text-sm">No data yet</p>
+        ) : (
+          dailyXp.map((day, i) => {
+            const date = new Date(day.log_date)
+            const dayName = date.toLocaleDateString('en', { weekday: 'short' })
+            const barHeight = Math.max((day.xp_earned / maxDayXp) * 128, 4) // px, min 4px so 0-XP days still show a sliver
+            return (
+              <div key={i} className="flex flex-col items-center gap-1 flex-1 h-full justify-end">
+                <div
+                  className="w-full bg-duo-green rounded-t-lg transition-all"
+                  style={{ height: `${barHeight}px` }}
+                />
+                <span className="text-xs font-bold text-muted-foreground">{dayName}</span>
+              </div>
+            )
+          })
+        )}
       </div>
+    </div>
 
       <div className="bg-card border-2 border-border rounded-2xl p-4">
         <h3 className="font-black text-lg mb-2">Daily Goal</h3>

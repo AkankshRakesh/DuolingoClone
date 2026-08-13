@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from datetime import datetime, timezone, timedelta
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -371,6 +372,100 @@ def seed_data(conn: sqlite3.Connection) -> None:
             """,
             (rid(), name, name.lower(), color, xp),
         )
+
+    test_user_id = rid()
+    test_learner_id = rid()
+    now = datetime.now(timezone.utc).isoformat()
+
+    conn.execute(
+        """
+        INSERT INTO users (id, username, email, password_hash, display_name, created_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        (test_user_id, "testuser", "testuser@example.com", simple_hash("password123"), "Test User", now),
+    )
+    conn.execute(
+        """
+        INSERT INTO learners
+          (id, user_id, username, display_name, avatar_url, total_xp, streak_days, hearts, max_hearts, gems, daily_xp_goal, daily_xp_earned, last_activity_date)
+        VALUES (?, ?, ?, ?, NULL, 140, 4, 4, 5, 620, 50, 30, ?)
+        """,
+        (test_learner_id, test_user_id, "testuser", "Test User", now[:10]),
+    )
+
+    # skill-1: fully completed (all 3 lessons done, 1 crown earned)
+    # skill-2: unlocked, 1 of 3 lessons done
+    # skill-3: still locked
+    test_progress = [
+        ("skill-1", 1, 1, 1, 3),   # crowns_earned, is_unlocked, is_completed, lessons_completed
+        ("skill-2", 0, 1, 0, 1),
+        ("skill-3", 0, 0, 0, 0),
+    ]
+    for skill_id, crowns, unlocked, completed, lessons_done in test_progress:
+        conn.execute(
+            """
+            INSERT INTO skill_progress
+              (id, user_id, skill_id, crowns_earned, is_unlocked, is_completed, lessons_completed)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (rid(), test_learner_id, skill_id, crowns, unlocked, completed, lessons_done),
+        )
+
+    # mark the corresponding lessons as completed so getCompletedLessonIds reflects it
+    completed_lesson_ids = [
+        "skill-1-lesson-0", "skill-1-lesson-1", "skill-1-lesson-2",  # all of skill-1
+        "skill-2-lesson-0",  # first lesson of skill-2
+    ]
+    for lesson_id in completed_lesson_ids:
+        conn.execute(
+            """
+            INSERT OR REPLACE INTO lesson_completions
+              (id, user_id, lesson_id, xp_earned, hearts_remaining, completed_at)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (rid(), test_learner_id, lesson_id, 10, 5, now),
+        )
+
+    # daily xp log for the last few days, for the streak/chart to show something
+    for days_ago, xp in [(0, 30), (1, 45), (2, 20), (3, 50)]:
+        log_date = (datetime.now(timezone.utc).date()).isoformat()
+        conn.execute(
+            """
+            INSERT INTO daily_xp_log (id, user_id, log_date, xp_earned)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(user_id, log_date) DO UPDATE SET xp_earned = excluded.xp_earned
+            """,
+            (rid(), test_learner_id, log_date, xp),
+        )
+
+    conn.execute(
+        """
+        INSERT INTO leaderboard_entries
+          (id, user_id, display_name, username, avatar_color, weekly_xp, is_current_user, is_bot)
+        VALUES (?, ?, ?, ?, ?, 140, 1, 0)
+        """,
+        (rid(), test_learner_id, "Test User", "testuser", "#58CC02"),
+    )
+
+    weekly_xp = [
+    (6, 35),
+    (5, 60),
+    (4, 0),
+    (3, 80),
+    (2, 45),
+    (1, 55),
+    (0, 30),
+    ]
+    for days_ago, xp in weekly_xp:
+        log_date = (datetime.now(timezone.utc).date() - timedelta(days=days_ago)).isoformat()
+        conn.execute(
+            """
+            INSERT INTO daily_xp_log (id, user_id, log_date, xp_earned)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(user_id, log_date) DO UPDATE SET xp_earned = excluded.xp_earned
+            """,
+            (rid(), test_learner_id, log_date, xp),
+        )
     conn.commit()
 
 
@@ -539,7 +634,7 @@ def update_skill_progress(learner_id: str, skill_id: str, payload: SkillProgress
             """,
             (payload.lessons_completed, 1 if payload.is_completed else 0, payload.crowns_earned, learner_id, skill_id),
         )
-        if payload.is_completed:
+        if payload.lessons_completed > 0:
             skills = conn.execute("SELECT id FROM skills ORDER BY sort_order").fetchall()
             skill_ids = [skill["id"] for skill in skills]
             if skill_id in skill_ids:
