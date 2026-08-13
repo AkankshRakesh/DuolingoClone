@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { type Unit, type Skill, type Lesson, getUnits, getLessonsBySkill, getCompletedLessonIds } from '../lib/db'
-import { useApp } from '../lib/store'
-import { DuoMascot } from '../components/DuoMascot'
+import { type Unit, type Skill, type Lesson, getUnits, getLessonsBySkill, getCompletedLessonIds } from '../../lib/db'
+import { useApp } from '../../lib/store'
+import { DuoMascot } from '../../components/DuoMascot'
 import { Lock, Crown, Check } from 'lucide-react'
-import { cn } from '../lib/utils'
+import { cn } from '../../lib/utils'
 import { toast } from 'sonner'
 
 export default function LearningPathPage() {

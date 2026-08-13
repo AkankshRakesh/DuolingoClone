@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getDailyXpLog } from '../lib/db'
-import { useApp } from '../lib/store'
+import { getDailyXpLog } from '../../lib/db'
+import { useApp } from '../../lib/store'
 import { Flame, Zap, Star, Award, TrendingUp, LogOut } from 'lucide-react'
-import { cn } from '../lib/utils'
+import { cn } from '../../lib/utils'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 

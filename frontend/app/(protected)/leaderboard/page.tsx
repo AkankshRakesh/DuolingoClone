@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getLeaderboard, type LeaderboardEntry } from '../lib/db'
-import { useApp } from '../lib/store'
-import { DuoMascot } from '../components/DuoMascot'
-import { cn } from '../lib/utils'
+import { getLeaderboard, type LeaderboardEntry } from '../../lib/db'
+import { useApp } from '../../lib/store'
+import { DuoMascot } from '../../components/DuoMascot'
+import { cn } from '../../lib/utils'
 
 export default function LeaderboardPage() {
   const { learner } = useApp()
