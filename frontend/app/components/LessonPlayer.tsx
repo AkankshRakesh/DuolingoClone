@@ -144,7 +144,7 @@ export function LessonPlayer() {
             <Heart className="w-24 h-24 text-duo-red fill-duo-red mx-auto" />
             <X className="w-12 h-12 text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" strokeWidth={4} />
           </div>
-          <h1 className="text-3xl font-black mt-6 text-foreground">You're out of hearts!</h1>
+          <h1 className="text-3xl font-black mt-6 text-foreground">You&rsquo;re out of hearts!</h1>
           <p className="text-muted-foreground mt-2">You ran out of hearts. Refill them to keep learning.</p>
           <div className="flex flex-col gap-3 mt-8">
             <button
@@ -210,65 +210,89 @@ export function LessonPlayer() {
   }
 
   return (
-    <div className="min-h-svh bg-background flex flex-col">
-      {/* Top bar with progress and hearts */}
-      <div className="px-4 py-3 flex items-center gap-4 max-w-2xl mx-auto w-full">
-        <button onClick={() => router.push('/')} className="text-muted-foreground hover:text-foreground shrink-0">
-          <X className="size-6" />
-        </button>
-        <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden">
-          <div
-            className="h-full bg-duo-green rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        <div className="flex items-center gap-1 shrink-0">
-          <Heart className="size-5 text-duo-red fill-duo-red" />
-          <span className="font-black text-sm text-duo-red">{learner?.hearts ?? 5}</span>
+    /*
+     * IMPORTANT:
+     * This component is intentionally NOT `fixed` and does NOT use `inset-0`.
+     * It fills the content area supplied by the dashboard/app layout.
+     * That means the sidebar + top navbar remain outside this lesson window.
+     *
+     * The parent layout should give this area a bounded height and use
+     * `min-h-0` on its flex/grid ancestors.
+     */
+    <div className="relative flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden bg-background">
+      {/* Top bar — fixed within this lesson window because the middle is the only scroller */}
+      <div className="relative z-20 shrink-0 border-b border-border bg-background px-4 py-3">
+        <div className="mx-auto flex w-full max-w-2xl items-center gap-4">
+          <button
+            onClick={() => router.push('/')}
+            className="shrink-0 text-muted-foreground hover:text-foreground"
+            aria-label="Exit lesson"
+          >
+            <X className="size-6" />
+          </button>
+
+          <div className="h-3 min-w-0 flex-1 overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full bg-duo-green transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+
+          <div className="flex shrink-0 items-center gap-1">
+            <Heart className="size-5 fill-duo-red text-duo-red" />
+            <span className="text-sm font-black text-duo-red">
+              {learner?.hearts ?? 5}
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Exercise area */}
-      <div className="flex-1 px-4 py-8 max-w-2xl mx-auto w-full">
-        {currentExercise.type === 'multiple_choice' && (
-          <MultipleChoice exercise={currentExercise} result={result} onAnswerChange={setAnswer} />
-        )}
-        {currentExercise.type === 'translate' && (
-          <Translate exercise={currentExercise} result={result} onAnswerChange={setAnswer} />
-        )}
-        {currentExercise.type === 'match_pairs' && (
-          <MatchPairs exercise={currentExercise} result={result} onAnswerChange={setAnswer} />
-        )}
-        {currentExercise.type === 'fill_blank' && (
-          <FillBlank exercise={currentExercise} result={result} onAnswerChange={setAnswer} />
-        )}
-        {currentExercise.type === 'type_answer' && (
-          <TypeAnswer exercise={currentExercise} result={result} onAnswerChange={setAnswer} />
-        )}
-      </div>
+      {/* ONLY this area scrolls */}
+      <main className="min-h-0 min-w-0 flex-1 overflow-y-auto overflow-x-hidden">
+        <div className="mx-auto w-full max-w-2xl px-4 py-8">
+          {currentExercise.type === 'multiple_choice' && (
+            <MultipleChoice exercise={currentExercise} result={result} onAnswerChange={setAnswer} />
+          )}
+          {currentExercise.type === 'translate' && (
+            <Translate exercise={currentExercise} result={result} onAnswerChange={setAnswer} />
+          )}
+          {currentExercise.type === 'match_pairs' && (
+            <MatchPairs exercise={currentExercise} result={result} onAnswerChange={setAnswer} />
+          )}
+          {currentExercise.type === 'fill_blank' && (
+            <FillBlank exercise={currentExercise} result={result} onAnswerChange={setAnswer} />
+          )}
+          {currentExercise.type === 'type_answer' && (
+            <TypeAnswer exercise={currentExercise} result={result} onAnswerChange={setAnswer} />
+          )}
+        </div>
+      </main>
 
-      {/* Feedback bar */}
+      {/* Bottom action — fixed within this lesson window */}
       {result !== 'none' && (
         <div
           className={cn(
-            'feedback-bar',
-            result === 'correct' ? 'bg-duo-green text-white' : 'bg-duo-red text-white'
+            'relative z-20 shrink-0 border-t',
+            result === 'correct'
+              ? 'border-duo-green bg-duo-green text-white'
+              : 'border-duo-red bg-duo-red text-white'
           )}
         >
-          <div className="max-w-2xl mx-auto flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
+          <div className="mx-auto flex w-full max-w-2xl items-center justify-between gap-4 px-4 py-4">
+            <div className="flex min-w-0 items-center gap-3">
               {result === 'correct' ? (
-                <Check className="size-8" strokeWidth={3} />
+                <Check className="size-8 shrink-0" strokeWidth={3} />
               ) : (
-                <X className="size-8" strokeWidth={3} />
+                <X className="size-8 shrink-0" strokeWidth={3} />
               )}
-              <div>
-                <p className="font-black text-lg">
+              <div className="min-w-0">
+                <p className="text-lg font-black">
                   {result === 'correct' ? 'Correct!' : 'Incorrect'}
                 </p>
                 {result === 'incorrect' && currentExercise.type !== 'match_pairs' && (
                   <p className="text-sm opacity-90">
-                    Correct answer: <span className="font-bold">{currentExercise.correct_answer}</span>
+                    Correct answer:{' '}
+                    <span className="font-bold">{currentExercise.correct_answer}</span>
                   </p>
                 )}
                 {result === 'correct' && currentExercise.explanation && (
@@ -276,8 +300,9 @@ export function LessonPlayer() {
                 )}
               </div>
             </div>
+
             <button
-              className="duo-btn py-3 px-8 bg-white text-secondary cursor-pointer shadow-[0_3px_0_oklch(0.8_0_0)]"
+              className="duo-btn shrink-0 bg-white px-8 py-3 text-secondary cursor-pointer shadow-[0_3px_0_oklch(0.8_0_0)]"
               onClick={handleContinue}
             >
               Continue
@@ -286,10 +311,9 @@ export function LessonPlayer() {
         </div>
       )}
 
-      {/* Check button */}
       {result === 'none' && (
-        <div className="border-t border-border bg-background p-4">
-          <div className="max-w-2xl mx-auto">
+        <div className="relative z-20 shrink-0 border-t border-border bg-background p-4">
+          <div className="mx-auto max-w-2xl">
             <button
               className={cn(
                 'duo-btn w-full py-4 cursor-pointer',
