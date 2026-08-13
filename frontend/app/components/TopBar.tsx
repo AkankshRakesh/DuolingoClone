@@ -1,9 +1,12 @@
 import { useApp } from '../lib/store'
 import { Flame, Heart, Zap, Gem } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 import { cn } from '../lib/utils'
 
 export function TopBar() {
   const { learner } = useApp()
+  const pathname = usePathname()
+  const isLesson = pathname.startsWith('/lesson')
 
   if (!learner) return null
 
@@ -14,8 +17,13 @@ export function TopBar() {
       <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <DuoLogo className="size-8" />
-          <span className="font-black text-xl text-primary hidden sm:block">duolingo</span>
+          {/* <DuoLogo className="size-8" /> */}
+          <img
+            src={isLesson ? '/work.gif' : '/roll.gif'}
+            alt="Waving Duo Mascot"
+            className={isLesson ? 'w-24 h-16' : 'size-24'}
+          />
+          {/* <span className="font-black text-xl text-primary hidden sm:block">Duolingo</span> */}
         </div>
 
         {/* Daily XP Progress */}
