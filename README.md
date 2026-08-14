@@ -20,7 +20,6 @@ A full-stack Duolingo-inspired language-learning application built with Next.js,
 - Lesson completion and skill progression
 - Skill unlocking
 - Weekly leaderboard with seeded bot users
-- Light/dark theme
 - Responsive Duolingo-inspired UI
 - Independent frontend and backend deployments
 
@@ -441,10 +440,10 @@ Signup body:
 
 ```json
 {
-  "username": "john",
-  "email": "john@example.com",
+  "username": "a",
+  "email": "a@example.com",
   "password": "secret",
-  "display_name": "John"
+  "display_name": "a"
 }
 ```
 
@@ -452,7 +451,7 @@ Login body:
 
 ```json
 {
-  "username": "john",
+  "username": "a",
   "password": "secret"
 }
 ```
