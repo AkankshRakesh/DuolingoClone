@@ -129,7 +129,7 @@ export function LessonPlayer() {
     return (
       <div className="min-h-svh flex items-center justify-center bg-background">
         <div className="text-center">
-          <DuoMascot className="w-24 h-28 mx-auto animate-float" expression="happy" />
+          <img src="/loading.gif" alt="Duo Mascot Loading" className="mx-auto w-36 " />
           <p className="mt-4 font-bold text-muted-foreground">Loading lesson...</p>
         </div>
       </div>
@@ -174,7 +174,7 @@ export function LessonPlayer() {
       <div className="min-h-svh flex items-center justify-center bg-background p-4">
         <Confetti />
         <div className="text-center max-w-sm">
-          <DuoMascot className="w-32 h-36 mx-auto animate-bounce-in" expression="excited" />
+          <img src="/yay.gif" alt="Duo Mascot Ringing Bell" className="mx-auto w-36 h-36" />
           <h1 className="text-4xl font-black mt-4 text-duo-yellow">Lesson Complete!</h1>
           <div className="grid grid-cols-3 gap-4 mt-8">
             <div className="bg-card border-2 border-border rounded-2xl p-4">
