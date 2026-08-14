@@ -2,6 +2,8 @@
 
 A full-stack Duolingo-inspired language-learning application built with Next.js, TypeScript, FastAPI, and SQLite.
 
+
+
 ## Features
 
 - User signup and login
