@@ -2,6 +2,10 @@
 
 A full-stack Duolingo-inspired language-learning application built with Next.js, TypeScript, FastAPI, and SQLite.
 
+![Login page](https://github.com/AkankshRakesh/DuolingoClone/blob/master/frontend/image0.png)
+![Leaderboard](https://github.com/AkankshRakesh/DuolingoClone/blob/master/frontend/image1.png)
+![Lesson](https://github.com/AkankshRakesh/DuolingoClone/blob/master/frontend/image2.png)
+![Profile page](https://github.com/AkankshRakesh/DuolingoClone/blob/master/frontend/image3.png)
 
 
 ## Features
