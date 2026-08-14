@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { type Unit, type Skill, type Lesson, getUnits, getLessonsBySkill, getCompletedLessonIds } from '../lib/db'
-import { useApp } from '../lib/store'
-import { DuoMascot } from '../components/DuoMascot'
+import { type Unit, type Skill, type Lesson, getUnits, getLessonsBySkill, getCompletedLessonIds } from '../../lib/db'
+import { useApp } from '../../lib/store'
+import { DuoMascot } from '../../components/DuoMascot'
 import { Lock, Crown, Check } from 'lucide-react'
-import { cn } from '../lib/utils'
+import { cn } from '../../lib/utils'
 import { toast } from 'sonner'
 
 export default function LearningPathPage() {
@@ -123,7 +123,7 @@ export default function LearningPathPage() {
                   <button
                     onClick={() => handleSkillClick(skill)}
                     className={cn(
-                      'relative size-20 rounded-full flex items-center justify-center text-4xl transition-transform',
+                      'relative size-20 cursor-pointer rounded-full flex items-center justify-center text-4xl transition-transform',
                       isCompleted
                         ? 'bg-duo-green shadow-[0_6px_0_var(--duo-green-dark)]'
                         : isUnlocked
@@ -139,7 +139,7 @@ export default function LearningPathPage() {
                       </div>
                     )}
                   </button>
-
+                    
                   <div className="mt-2 text-center">
                     <p className={cn('font-bold text-sm', isUnlocked ? 'text-foreground' : 'text-muted-foreground')}>
                       {skill.title}
@@ -157,7 +157,7 @@ export default function LearningPathPage() {
                   </div>
 
                   {isUnlocked && !isCompleted && completedLessonCount > 0 && (
-                    <div className="absolute -top-1 -left-1 size-22">
+                    <div className="absolute -top-1 -left-1 size-22 pointer-events-none">
                       <svg className="size-22 -rotate-90" viewBox="0 0 88 88">
                         <circle cx="44" cy="44" r="40" fill="none" stroke="var(--muted)" strokeWidth="4" />
                         <circle

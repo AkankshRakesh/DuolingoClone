@@ -2,12 +2,13 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useApp } from '../lib/store'
-import { signup, login } from '../lib/db'
-import { initDb } from '../lib/db'
-import { DuoMascot } from '../components/DuoMascot'
+import { useApp } from '../../lib/store'
+import { signup, login } from '../../lib/db'
+import { initDb } from '../../lib/db'
+import { DuoMascot } from '../../components/DuoMascot'
 import { toast } from 'sonner'
-import { cn } from '../lib/utils'
+import { cn } from '../../lib/utils'
+import AuthRoute from '../../components/AuthRoute'
 
 export default function AuthPage() {
   const router = useRouter()
@@ -62,11 +63,13 @@ export default function AuthPage() {
   }
 
   return (
+    <AuthRoute>
     <div className="min-h-svh flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <DuoMascot className="w-24 h-28 mx-auto animate-float" expression="happy" />
-          <h1 className="text-3xl font-black text-primary mt-4">duolingo</h1>
+          {/* <DuoMascot className="w-24 h-28 mx-auto animate-float" expression="happy" /> */}
+          <img src="/wave.gif" alt="Waving Duo Mascot" className="mx-auto w-44 h-28" />
+          <h1 className="text-3xl font-black text-primary">DuoWingo</h1>
         </div>
 
         <div className="flex gap-2 mb-6 p-1 bg-muted rounded-xl">
@@ -163,5 +166,6 @@ export default function AuthPage() {
         </p>
       </div>
     </div>
+    </AuthRoute>
   )
 }

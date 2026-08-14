@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getLeaderboard, type LeaderboardEntry } from '../lib/db'
-import { useApp } from '../lib/store'
-import { DuoMascot } from '../components/DuoMascot'
-import { cn } from '../lib/utils'
+import { getLeaderboard, type LeaderboardEntry } from '../../lib/db'
+import { useApp } from '../../lib/store'
+import { DuoMascot } from '../../components/DuoMascot'
+import { cn } from '../../lib/utils'
 
 export default function LeaderboardPage() {
   const { learner } = useApp()
@@ -24,7 +24,7 @@ export default function LeaderboardPage() {
   return (
     <div className="space-y-6 pb-8">
       <div className="text-center">
-        <DuoMascot className="w-24 h-28 mx-auto animate-float" expression="happy" />
+        <img src="/happy.gif" alt="Happy Duo Mascot" className="mx-auto w-30 h-30" />
         <h1 className="text-3xl font-black mt-2">Leaderboard</h1>
         <p className="text-muted-foreground">Top learners this week</p>
       </div>
