@@ -70,7 +70,7 @@ export default function LearningPathPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <DuoMascot className="w-20 h-24 animate-float" />
+         <img src="/loading.gif" alt="Duo Mascot Loading" className="mx-auto w-36 " />
       </div>
     )
   }
@@ -79,7 +79,7 @@ export default function LearningPathPage() {
     <div className="space-y-8 pb-8">
       {learner && learner.hearts === 0 && (
         <div className="bg-duo-red/10 border-2 border-duo-red rounded-2xl p-4 flex items-center gap-4">
-          <DuoMascot className="w-16 h-20 shrink-0" expression="sad" />
+           <img src="/loading.gif" alt="Duo Mascot Loading" className="mx-auto w-36 " />
           <div className="flex-1">
             <h3 className="font-black text-duo-red">You&apos;re out of hearts!</h3>
             <p className="text-sm text-muted-foreground">Refill with gems or practice to earn more.</p>
