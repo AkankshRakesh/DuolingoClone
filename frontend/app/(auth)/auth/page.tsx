@@ -20,6 +20,30 @@ export default function AuthPage() {
   const [username, setUsername] = useState('')
   const [displayName, setDisplayName] = useState('')
   const [password, setPassword] = useState('')
+  const handleTestLogin = async () => {
+    if (appLoading || loading) return
+
+    setLoading(true)
+
+    try {
+      await initDb()
+
+      const result = await login('testuser', 'password123')
+
+      if (result.ok) {
+        await setSession(result.learner.id)
+        toast.success('Logged in with test account!')
+        router.push('/learningpath')
+      } else {
+        toast.error(result.error)
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error('Unable to connect to the backend')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -153,6 +177,17 @@ export default function AuthPage() {
           >
             {mode === 'login' ? 'Log In' : 'Create Account'}
           </button>
+
+          {mode === 'login' && (
+            <button
+              type="button"
+              onClick={handleTestLogin}
+              disabled={loading || appLoading}
+              className="w-full cursor-pointer py-3 rounded-xl border-2 border-border bg-background font-bold text-sm hover:bg-muted transition-colors disabled:opacity-50"
+            >
+              {loading ? 'Logging in...' : 'Login with Test Account'}
+            </button>
+          )}
         </form>
 
         <p className="text-center text-xs text-muted-foreground mt-6">
